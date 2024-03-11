@@ -9,7 +9,7 @@ const PostDispaly = ({storedPosts,setStoredPosts}) => {
       setStoredPosts(parsedStoredPosts);
       // eslint-disable-next-line react/prop-types
     }, [storedPosts.length] );
-    console.log('get post ',storedPosts);
+   // console.log('get post ',storedPosts);
     return (
     <div>
       
