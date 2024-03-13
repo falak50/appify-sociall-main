@@ -9,12 +9,12 @@ import { v4 as uuidv4 } from "uuid";
 //   password:'201115036',
 //   reactPostID:[],
 // }
-// eslint-disable-next-line react/prop-types
+// eslint-disable react/prop-types
 const PostOne = ({ post, setStoredPosts, handledeletePost, logUser,setlogUser }) => {
   // const logUser = JSON.parse(localStorage.getItem("logUser"));
   // const [logUser,setlogUser] = useState(JSON.parse(localStorage.getItem("logUser")));
  // console.log(logUser);
-  const [reactCount, setReactCount] = useState(false);
+  const [reactCount, setReactCount] = useState(post?.reactCount);
   const [isReact, setIsReact] = useState(false);
   const [shareCount, setShareCount] = useState(post?.shareCount);
   const [commentCount, setCommentCount] = useState(0);
@@ -28,14 +28,14 @@ const PostOne = ({ post, setStoredPosts, handledeletePost, logUser,setlogUser })
   useEffect(()=>{
    // console.log('yes in side ')
     const reactPostID = logUser?.reactPostID;
-    const updatePostID = reactPostID.filter(x=>{
+    const updatePostID = reactPostID?.filter(x=>{
      // console.log('x',x);
      // console.log('cur postid ',post.postId);
       return post.postId === x;
     });
     // console.log(`post id ${post.postId} `);
     // console.log('updatePostID -> useEE ',updatePostID)
-    if(updatePostID.length){
+    if(updatePostID?.length){
       // console.log('true setIsReact')
       setIsReact(true);
     }else{
@@ -70,7 +70,7 @@ const PostOne = ({ post, setStoredPosts, handledeletePost, logUser,setlogUser })
     } else {
      // console.log("remove click ");
       const reactPostID = logUser?.reactPostID;
-      const updatePostID = reactPostID.filter(x=>{
+      const updatePostID = reactPostID?.filter(x=>{
       //  console.log('x',x);
       //  console.log('cur postid ',post.postId);
         return post.postId !== x;

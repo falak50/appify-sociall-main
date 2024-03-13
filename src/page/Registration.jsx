@@ -1,14 +1,18 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Navigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
-const logUser = {
-    userId:'thisISuserID',
-    name:'falak',
-    email:'falak170@gmail.com',
-    password:'201115036',
-    reactPostID:[],
-    reactCoomentID:[]
-  }
+// const logUser = {
+//     userId:'thisISuserID',
+//     name:'falak',
+//     email:'falak170@gmail.com',
+//     password:'201115036',
+//     reactPostID:[],
+//     reactCoomentID:[]
+//   }
 const Registration = () => {
+  const [isNavitage,setIsNavitage] = useState(false);
+  const [isSwap,setIsSwap] = useState(false);
   const {
     register,
     handleSubmit,
@@ -46,10 +50,18 @@ const Registration = () => {
         
       const updateData = [user,...oldUsers];
       localStorage.setItem('users',JSON.stringify(updateData));
-     
+      localStorage.setItem('logUser',JSON.stringify(user));
      alert('registation done ')
+     setIsNavitage(!isNavitage);
     
   };
+
+  if(isNavitage){
+    return <Navigate to="/"  replace></Navigate>
+  }
+  if(isSwap){
+    return <Navigate to="/login"  replace></Navigate>
+  }
   return (
     <section className="_social_registration_wrapper _layout_main_wrapper">
       <div className="_shape_one">
@@ -413,7 +425,9 @@ const Registration = () => {
                     <div className="_social_registration_bottom_txt">
                       <p className="_social_registration_bottom_txt_para">
                         Dont have an account?{" "}
-                        <a href="#0">Create New Account</a>
+                        <a 
+                        onClick={()=>setIsSwap(!isSwap)}
+                        href="">Already has an Account</a>
                       </p>
                     </div>
                   </div>

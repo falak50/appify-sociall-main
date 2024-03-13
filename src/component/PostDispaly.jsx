@@ -8,7 +8,7 @@ const PostDispaly = ({storedPosts,setStoredPosts}) => {
       const parsedStoredPosts = JSON.parse(storedPostsString);
       setStoredPosts(parsedStoredPosts);
       // eslint-disable-next-line react/prop-types
-    }, [storedPosts.length] );
+    }, [storedPosts?.length] );
    // console.log('get post ',storedPosts);
 
    const handledeletePost = (id)=>{
