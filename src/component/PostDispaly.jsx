@@ -3,12 +3,21 @@ import PostOne from './PostOne';
 // eslint-disable-next-line react/prop-types
 const PostDispaly = ({storedPosts,setStoredPosts}) => {
   const [logUser,setlogUser] = useState(JSON.parse(localStorage.getItem("logUser"))); 
+
+  
     useEffect(() => {
       const storedPostsString = localStorage.getItem('posts');
       const parsedStoredPosts = JSON.parse(storedPostsString);
       setStoredPosts(parsedStoredPosts);
       // eslint-disable-next-line react/prop-types
-    }, [storedPosts?.length] );
+    }, [] );
+    
+    // useEffect(() => {
+    //   const storedPostsString = localStorage.getItem('posts');
+    //   const parsedStoredPosts = JSON.parse(storedPostsString);
+    //   // setStoredPosts(parsedStoredPosts);
+    //   // eslint-disable-next-line react/prop-types
+    // }, [storedPosts.lenght] );
    // console.log('get post ',storedPosts);
 
    const handledeletePost = (id)=>{
@@ -32,6 +41,7 @@ const PostDispaly = ({storedPosts,setStoredPosts}) => {
               return <PostOne
               key={x?.postId}
               post={x}
+              storedPosts={storedPosts}
               setStoredPosts={setStoredPosts}
               handledeletePost={handledeletePost}
               logUser={logUser}

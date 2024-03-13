@@ -2,18 +2,15 @@ import { useEffect, useState } from "react";
 import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 import Comment from "./Comment";
 import { v4 as uuidv4 } from "uuid";
-// const logUser = {
-//   userId:'thisISuserID',
-//   name:'falak',
-//   email:'falak170@gmail.com',
-//   password:'201115036',
-//   reactPostID:[],
-// }
+import EditModal from "./EditModal";
+
 // eslint-disable react/prop-types
-const PostOne = ({ post, setStoredPosts, handledeletePost, logUser,setlogUser }) => {
+const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,setlogUser }) => {
   // const logUser = JSON.parse(localStorage.getItem("logUser"));
   // const [logUser,setlogUser] = useState(JSON.parse(localStorage.getItem("logUser")));
  // console.log(logUser);
+  // console.log(post.userId===logUser.userId);
+  const [isOwner,setIsOwner] = useState(post.userId===logUser.userId);
   const [reactCount, setReactCount] = useState(post?.reactCount);
   const [isReact, setIsReact] = useState(false);
   const [shareCount, setShareCount] = useState(post?.shareCount);
@@ -284,6 +281,74 @@ const PostOne = ({ post, setStoredPosts, handledeletePost, logUser,setlogUser })
                     Hide Post
                   </a>
                 </li>
+                {/* ------ delete edit butoon --------  */}
+                {/* ------ delete edit butoon --------  */}
+               {isOwner ?
+                <div className="Can_Delete_Edit">
+                <li className="_feed_timeline_dropdown_item">
+                  <a href="#0" className="">
+                  {/* <a href="#0" className="_feed_timeline_dropdown_link"> */}
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={18}
+                        height={18}
+                        fill="none"
+                        viewBox="0 0 18 18"
+                      >
+                        <path
+                          stroke="#1890FF"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="1.2"
+                          d="M8.25 3H3a1.5 1.5 0 00-1.5 1.5V15A1.5 1.5 0 003 16.5h10.5A1.5 1.5 0 0015 15V9.75"
+                        />
+                        <path
+                          stroke="#1890FF"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="1.2"
+                          d="M13.875 1.875a1.591 1.591 0 112.25 2.25L9 11.25 6 12l.75-3 7.125-7.125z"
+                        />
+                      </svg>
+                    </span>
+                    {/* edit post  */}
+                    <EditModal 
+                    post={post}
+                    storedPosts={storedPosts}
+                    setStoredPosts={setStoredPosts}
+                    ></EditModal>
+                  </a>
+                </li>
+                <li
+                  onClick={() => handledeletePost(post?.postId)}
+                  className="_feed_timeline_dropdown_item"
+                >
+                  <a href="#0" className="_feed_timeline_dropdown_link">
+                    <span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={18}
+                        height={18}
+                        fill="none"
+                        viewBox="0 0 18 18"
+                      >
+                        <path
+                          stroke="#1890FF"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="1.2"
+                          d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5zM7.5 8.25v4.5M10.5 8.25v4.5"
+                        />
+                      </svg>
+                    </span>
+                    Delete Post
+                  </a>
+                </li>
+                </div>
+                : <></>
+               } 
+               {/* <div className="Can_Delete_Edit">
                 <li className="_feed_timeline_dropdown_item">
                   <a href="#0" className="_feed_timeline_dropdown_link">
                     <span>
@@ -338,6 +403,9 @@ const PostOne = ({ post, setStoredPosts, handledeletePost, logUser,setlogUser })
                     Delete Post
                   </a>
                 </li>
+                </div> */}
+                {/* ------ delete edit butoon --------  */}
+                {/* ------ delete edit butoon --------  */}
               </ul>
             </div>
           </div>
