@@ -317,6 +317,7 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
                     post={post}
                     storedPosts={storedPosts}
                     setStoredPosts={setStoredPosts}
+                    setisDropdown={setisDropdown}
                     ></EditModal>
                   </a>
                 </li>

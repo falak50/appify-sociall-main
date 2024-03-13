@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
-export default function EditModal({post,setStoredPosts,storedPosts}) {
+export default function EditModal({post,setStoredPosts,storedPosts,setisDropdown}) {
     console.log('send post ', post.postText);
    //----------------------- pre 
    const logUser = JSON.parse(localStorage.getItem('logUser'))
@@ -51,6 +51,7 @@ export default function EditModal({post,setStoredPosts,storedPosts}) {
    localStorage.setItem('posts', postsString);
    
    setOpen(false);
+   setisDropdown(false);
 //    setPost('');
   }
 

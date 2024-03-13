@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PostOne from './PostOne';
 // eslint-disable-next-line react/prop-types
-const PostDispaly = ({storedPosts,setStoredPosts}) => {
+const PostDispaly = ({storedPosts,setStoredPosts,setisDropdown}) => {
   const [logUser,setlogUser] = useState(JSON.parse(localStorage.getItem("logUser"))); 
 
   
@@ -29,6 +29,7 @@ const PostDispaly = ({storedPosts,setStoredPosts}) => {
     });
     console.log("update post l -----> ",updatePostsl);
     localStorage.setItem('posts', JSON.stringify(updatePostsl));
+    
     setStoredPosts(updatePostsl);
     
   }
