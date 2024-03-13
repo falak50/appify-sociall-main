@@ -1,7 +1,42 @@
+import { useState } from "react";
 
 
 const CommentOne = ({comment}) => {
-    console.log('commentOne',comment)
+    // console.log('commentOne',comment);
+    const [subCommentTxt,setSubCommentTxt] = useState('');
+    const handleSubComentSubmit = (e)=>{
+        e.preventDefault();
+        console.log('handleSubComentSubmit clcik',subCommentTxt)
+    //     if(commentTxt===''){
+    //       alert('empty comment can not allow')
+    //       return ;
+    //     }
+    //     const postsl = JSON.parse(localStorage.getItem('posts'));
+    //     console.log(postsl);
+    //     console.log('handlesubmit click  ',commentTxt);
+    //     const updatePostsl = postsl?.map((x)=>{
+    //       if(x?.postId==post.postId){
+    //          //console.log(x);
+    //          const commentId = uuidv4();
+    //          const newCommnet={
+    //               commentId: commentId,
+    //               CommenterName: 'Falak Ahmed Sakib',
+    //               commenterUserId : '201036', 
+    //               commentReactCount: 0,
+    //               commentText: commentTxt ,
+    //               subComments: []
+    //          }
+    //          x.comments=[...x.comments,newCommnet];
+    //          setAllComment(x.comments)
+    //       }
+    //       return x
+    //     });
+    //    console.log('update post ->',updatePostsl);
+    //    const postsString = JSON.stringify(updatePostsl);
+    //    localStorage.setItem('posts', postsString);
+    //    setCommentTxt('')
+      }
+
     return (
         <div>
             <div className="_timline_comment_main">          
@@ -93,7 +128,9 @@ const CommentOne = ({comment}) => {
 
                
                 <div className="_feed_inner_comment_box">
-                  <form className="_feed_inner_comment_box_form">
+                  <form 
+                  onSubmit={handleSubComentSubmit} 
+                  className="_feed_inner_comment_box_form">
                     <div className="_feed_inner_comment_box_content">
                       <div className="_feed_inner_comment_box_content_image">
                         <img
@@ -103,11 +140,12 @@ const CommentOne = ({comment}) => {
                         />
                       </div>
                       <div className="_feed_inner_comment_box_content_txt">
-                        <textarea
+                        <input
                           className="form-control _comment_textarea"
                           placeholder="Write a comment"
                           id="floatingTextarea2"
-                          defaultValue={""}
+                          value={subCommentTxt}
+                          onChange={(e) => setSubCommentTxt(e.target.value)}
                         />
                       </div>
                     </div>

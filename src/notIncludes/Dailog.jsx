@@ -1,18 +1,20 @@
-import StoryDisplay from "./StoryDisplay";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+// ----------------
 import PostDispaly from './../component/PostDispaly';
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
-// const logUser = {
-//   userId:'thisISuserID',
-//   name:'falak',
-//   email:'falak170@gmail.com',
-//   password:'201115036',
-//   reactPostID:[],
-// }
-
-const Layout_Middle  = () => {
-  const logUser = JSON.parse(localStorage.getItem('logUser'))
+export default function Dailog() {
+   //----------------------- pre 
+   const logUser = JSON.parse(localStorage.getItem('logUser'))
   const [storedPosts, setStoredPosts] = useState([]);
   const [post, setPost] = useState('');
   useEffect(() => {
@@ -43,22 +45,45 @@ const Layout_Middle  = () => {
          commentCount: 0,
          comments: []
     }
-    setStoredPosts(postObj,...storedPosts);
-    const updateData =  [postObj,...storedPosts];
-    setStoredPosts(updateData);
-    // console.log(updateData);
-   const postsString = JSON.stringify(updateData);
-   localStorage.setItem('posts', postsString);
-   setPost('');
+    console.log(postObj)
+//     setStoredPosts(postObj,...storedPosts);
+//     const updateData =  [postObj,...storedPosts];
+//     setStoredPosts(updateData);
+//     // console.log(updateData);
+//    const postsString = JSON.stringify(updateData);
+//    localStorage.setItem('posts', postsString);
+//    setPost('');
   }
-    return (
-        <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-        <div className="_layout_middle_wrap _layout_middle_padding">
-          <div className="_layout_middle_inner">
-           
-            <StoryDisplay></StoryDisplay>
-          
-            <div className="_feed_inner_text_area  _b_radious6 _padd_b24 _padd_t24 _padd_r24 _padd_l24 _mar_b16">
+
+    // -------------------------
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open responsive dialog
+      </Button>
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"              Edit Post"}
+        </DialogTitle>
+        <DialogContent>
+        <div className="_feed_inner_text_area  _b_radious6 _padd_b24 _padd_t24 _padd_r24 _padd_l24 _mar_b16">
               <div className="_feed_inner_text_area_box">
                 <div className="_feed_inner_text_area_box_image">
                   <img
@@ -238,26 +263,9 @@ const Layout_Middle  = () => {
                {/* ---------------------------post BNT end -------------------  */}
             
               </div>
-
-            {/* /// POST AREA DIV EDN    */}
-            
-            {/* here all post dispaly */}
-            
-            <PostDispaly 
-            storedPosts={storedPosts}
-            setStoredPosts={setStoredPosts}
-            ></PostDispaly>
-            {/* <InputArea1></InputArea1> */}
-           
-          </div>
-        </div>
-      </div>
-    );
-};
-
-export default Layout_Middle ;
-
-
-
-
-
+        </DialogContent>
+       
+      </Dialog>
+    </React.Fragment>
+  );
+}

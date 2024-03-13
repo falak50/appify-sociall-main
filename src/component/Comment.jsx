@@ -2,7 +2,7 @@ import CommentOne from "./CommentOne";
 
 
 const Comment = ({allComment,setAllComment}) => {
-    console.log('allComment ',allComment);
+    // console.log('allComment ',allComment);
     return (
         <div>
          {allComment &&

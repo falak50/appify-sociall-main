@@ -1,14 +1,15 @@
 
 // import './App.css'
-import Container from './part/Container'
-import Navber from "./part/Navber"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './assets/css/bootstrap.min.css'
 import './assets/css/common.css'
 import './assets/css/main.css'
 import './assets/css/responsive.css'
-// import SwitchingBtn from './part/SwitchingBtn'
 import posts from './Data/data.js'
 import { useEffect } from 'react'
+import Registration from './page/Registration.jsx'
+import Login from './page/Login.jsx'
+import Home from './page/Home.jsx'
 function App() {
   //initial date made 
   useEffect(() => {
@@ -28,9 +29,15 @@ function App() {
 
   return (
     <>
-      {/* <SwitchingBtn></SwitchingBtn>  */}
-     <Navber></Navber>
-     <Container></Container>
+      
+      <Router>
+      <Routes>
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </Router>
+    
     </>
   )
 }
