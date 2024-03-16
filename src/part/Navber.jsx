@@ -1,21 +1,15 @@
-// import '../assets/css/bootstrap.min.css'
-// import '../assets/css/common.css'
-// import '../assets/css/main.css'
-// import '../assets/css/responsive.css'
-// className={
-//   isDropdown
-//     ? "_nav_profile_dropdown _profile_dropdown show"
-//     : "_nav_profile_dropdown _profile_dropdown "
-// }
+
 
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 // }
 const Navber = () => {
   const [isDropdown,setIsDropdown] = useState(false);
   const [isNavitage,setIsNavitage] = useState(false);
-  const [logUser,setlogUser] = useState('')
+  const [logUser,setlogUser] = useState('');
+  
   
    useEffect(()=>{
     const logUser = JSON.parse(localStorage.getItem("logUser"));
@@ -27,6 +21,13 @@ const Navber = () => {
     // localStorage.setItem('logUser',JSON.stringify(''))
     setlogUser(''); // Clear the user state
     setIsNavitage(true);
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: `Logout from your account .`,
+      showConfirmButton: false,
+      timer: 1300
+    });
   }
   if(isNavitage){
     console.log('click log out ')

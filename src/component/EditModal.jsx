@@ -55,6 +55,8 @@ export default function EditModal({open, setOpen,post,setStoredPosts,storedPosts
    setisDropdown(false);
   //  console.log('done',open)
 //    setPost('');
+
+
   }
 
  

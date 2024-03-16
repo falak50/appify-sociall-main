@@ -1,15 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { v4 as uuidv4 } from 'uuid';
-// const logUser = {
-//     userId:'thisISuserID',
-//     name:'falak',
-//     email:'falak170@gmail.com',
-//     password:'201115036',
-//     reactPostID:[],
-//     reactCoomentID:[]
-//   }
+/* eslint-disable */
 const Registration = () => {
   const [isNavitage,setIsNavitage] = useState(false);
   const [isSwap,setIsSwap] = useState(false);
@@ -51,8 +45,16 @@ const Registration = () => {
       const updateData = [user,...oldUsers];
       localStorage.setItem('users',JSON.stringify(updateData));
       localStorage.setItem('logUser',JSON.stringify(user));
-     alert('registation done ')
+    //  alert('registation done ')
      setIsNavitage(!isNavitage);
+
+     Swal.fire({
+      position: "center",
+      icon: "success",
+      title: `Registation suuccessfull . Welcome  ${user.name}.`,
+      showConfirmButton: false,
+      timer: 1300
+    });
     
   };
 

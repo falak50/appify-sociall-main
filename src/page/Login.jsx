@@ -2,15 +2,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid';
-// const logUser = {
-//     userId:'thisISuserID',
-//     name:'falak',
-//     email:'falak170@gmail.com',
-//     password:'201115036',
-//     reactPostID:[],
-//     reactCoomentID:[]
-//   }
+import Swal from "sweetalert2";
+/* eslint-disable */
 const Login = () => {
   const {
     register,
@@ -31,20 +24,39 @@ const Login = () => {
        });
     
     if(!user){
-        alert(`Incorrect email`);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Incorrect email!",
+          footer: 'try again'
+        });
         return;
     }
     if(user?.password!==data.password){
-      alert('Incorrect password ');
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Incorrect password ",
+        footer: 'try again'
+      });
       return;
     }
    
     console.log('user info ',);
-    alert(`login suuccessfull user name : ${user.name}`)
+    // alert(`login suuccessfull . Welcome : ${user.name}`)
+    
 
     localStorage.setItem('logUser',JSON.stringify(user));
 
     setIsNavitage(true);
+
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: `Login suuccessfull . Welcome  ${user.name}.`,
+      showConfirmButton: false,
+      timer: 1300
+    });
     
   };
 

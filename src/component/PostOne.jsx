@@ -209,7 +209,7 @@ const PostOne = ({
     setCommentTxt("");
   };
 
-  if(post.postText.length>50)console.log('post -> ',post)
+  // if(post.postText.length>50)console.log('post -> ',post)
 
   return (
     <>
