@@ -22,7 +22,7 @@ const Layout_Middle  = () => {
   }, [])
   const handleClick = ()=> {
 
-    console.log(typeof post);
+    console.log(post);
     if(post==''){
       alert('Empty post don not allow ');
       return;

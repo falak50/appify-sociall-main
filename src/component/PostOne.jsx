@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 import Comment from "./Comment";
 import { v4 as uuidv4 } from "uuid";
@@ -13,10 +13,7 @@ const PostOne = ({
   logUser,
   setlogUser,
 }) => {
-  // const logUser = JSON.parse(localStorage.getItem("logUser"));
-  // const [logUser,setlogUser] = useState(JSON.parse(localStorage.getItem("logUser")));
-  // console.log(logUser);
-  // console.log(post.userId===logUser.userId);
+
   const [isOwner, setIsOwner] = useState(post.userId === logUser?.userId);
   const [reactCount, setReactCount] = useState(post?.reactCount);
   const [isReact, setIsReact] = useState(false);
@@ -42,12 +39,9 @@ const PostOne = ({
     // console.log('yes in side ')
     const reactPostID = logUser?.reactPostID;
     const updatePostID = reactPostID?.filter((x) => {
-      // console.log('x',x);
-      // console.log('cur postid ',post.postId);
       return post.postId === x;
     });
-    // console.log(`post id ${post.postId} `);
-    // console.log('updatePostID -> useEE ',updatePostID)
+
     if (updatePostID?.length) {
       // console.log('true setIsReact')
       setIsReact(true);
@@ -66,7 +60,7 @@ const PostOne = ({
     const reactUserIds = post.reactUserIds ?? [];
     console.log("direct reactUserIds ", reactUserIds);
     const isFound = reactUserIds.find((id) => {
-      return id === logUser.userId;
+      return id === logUser?.userId;
     });
     console.log("is found ", isFound);
     if (isFound) setIsReact(true);
@@ -118,7 +112,7 @@ const PostOne = ({
     console.log("all user before", users);
     const updateUsers = users.map((x) => {
       if (x?.userId == logUser?.userId) {
-        x.reactPostID = logUser.reactPostID;
+        x.reactPostID = logUser?.reactPostID;
       }
       return x;
     });
@@ -215,7 +209,7 @@ const PostOne = ({
     setCommentTxt("");
   };
 
-  console.log('openh',open)
+  if(post.postText.length>50)console.log('post -> ',post)
 
   return (
     <>
@@ -479,8 +473,8 @@ const PostOne = ({
             </div>
           </div>
         </div>
-
-        <h4 className="_feed_inner_timeline_post_title">{post?.postText}</h4>
+        <h4 className="_feed_inner_timeline_post_title" style={{ whiteSpace: 'pre-line' }}>{post?.postText}</h4>
+       
         <div className="_feed_inner_timeline_image">
           <img
             src="assets/images/timeline_img.png"

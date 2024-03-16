@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
 export default function EditModal({open, setOpen,post,setStoredPosts,storedPosts,setisDropdown}) {
-    console.log('send post ', post.postText);
+    // console.log('send post ', post.postText);
    //----------------------- pre 
    const logUser = JSON.parse(localStorage.getItem('logUser'))
 //   const [storedPosts, setStoredPosts] = useState([]);
@@ -26,18 +26,18 @@ export default function EditModal({open, setOpen,post,setStoredPosts,storedPosts
 //   }, [])
   const handleClick = ()=> {
 
-    console.log(postText);
+    // console.log(postText);
     if(postText==''){
       alert('Empty update empty post don not allow ');
       return;
     }
 
     
-    console.log('click post ',postText);
+    // console.log('click post ',postText);
     const updateData=storedPosts.map((x)=>{
-        console.log('x => ',x);
+        // console.log('x => ',x);
         if(x.postId==post.postId){
-            console.log('mama milse ',x);
+            // console.log('mama milse ',x);
             x.postText=postText;
         }
         return x;
@@ -47,19 +47,17 @@ export default function EditModal({open, setOpen,post,setStoredPosts,storedPosts
     setStoredPosts(updateData);
 //     const updateData =  [postObj,...storedPosts];
     // setStoredPosts(updateData);
-    console.log('update data -> ',updateData);
+    // console.log('update data -> ',updateData);
    const postsString = JSON.stringify(updateData);
    localStorage.setItem('posts', postsString);
    
    handleClose()
    setisDropdown(false);
-   console.log('done',open)
+  //  console.log('done',open)
 //    setPost('');
   }
 
-  if(open){
-    console.log(open);
-  }
+ 
   
 
     // -------------------------

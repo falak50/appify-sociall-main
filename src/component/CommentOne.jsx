@@ -16,36 +16,36 @@ const CommentOne = ({ post, storedPosts, setStoredPosts, comment }) => {
   const [isShowAllcoment,setIsShowAllComment] =useState(false);
   useEffect(() => {
     const subCommentsl = JSON.parse(localStorage.getItem("subComments"));
-    // console.log('collect sub',subCommentsl);
+    console.log('collect sub',subCommentsl);
     const curSubCommentsl = subCommentsl?.filter((subComment) => {
       return subComment.commentId == comment.commentId;
     });
-    // console.log('after filter ',curSubCommentsl)
+    console.log('after filter ',curSubCommentsl)
     setSubCommentsD(curSubCommentsl);
   }, []);
-
+ console.log(subCommentsD)
   
   useEffect(()=>{
-    const reactUserIds = comment.reactUserIds ?? [];
+    const reactUserIds = comment?.reactUserIds ?? [];
     console.log('direct reactUserIds ',reactUserIds);
-    const isFound =reactUserIds.find(id=>{
-     return id===logUser.userId;
+    const isFound =reactUserIds?.find(id=>{
+     return id===logUser?.userId;
     })
     console.log('is found ',isFound);
     if(isFound)setIsReact(true);
     else setIsReact(false);
 
-    setReactCount(reactUserIds.length);
+    setReactCount(reactUserIds?.length);
     
   },[])
 
   const handleReaction = () => {
-    console.log("handle react click ",comment.commenterUserId);
+    console.log("handle react click ",comment?.commenterUserId);
     const postsl = JSON.parse(localStorage.getItem("posts"));
     console.log(postsl)
     const postl = postsl?.map((x) => { 
       if (x.postId == post?.postId) {
-      console.log('x post',x.comments);
+      console.log('x post',x?.comments);
       const comments=x.comments;
       const update=comments.map(com=>{
         if(com?.commentId==comment.commentId){
@@ -56,12 +56,12 @@ const CommentOne = ({ post, storedPosts, setStoredPosts, comment }) => {
           if(!isReact){
             com.reactUserIds.push(logUser?.userId);
             setIsReact(true);
-            setReactCount(com.reactUserIds.length);
+            setReactCount(com.reactUserIds?.length);
           }
           else{
              setIsReact(false);
-             com.reactUserIds=com.reactUserIds.filter((id)=>{
-               return id!==comment.commentId;
+             com.reactUserIds=com.reactUserIds?.filter((id)=>{
+               return id!==comment?.commentId;
              })
              setReactCount(0)
           }
@@ -266,7 +266,7 @@ const CommentOne = ({ post, storedPosts, setStoredPosts, comment }) => {
             {/* show all subcomment  */}
             {/* show all subcomment  */}
             {/* show all subcomment  */}
-            <div className="mx-4 mt-2 md-0">
+            {subCommentsD.length>0 &&    <div className="mx-4 mt-2 md-0">
        <div className="_previous_comment">
                          <button 
                          onClick={()=> setIsShowAllComment(!isShowAllcoment)}
@@ -276,22 +276,25 @@ const CommentOne = ({ post, storedPosts, setStoredPosts, comment }) => {
                           'View '
                           :
                           'Close '
-                          }   Previous Reply
+                          }   All Reply
                           
                          </button>
                        </div>
        </div>
+}
             <div className="m-3">
-              {subCommentsD &&
+              {isShowAllcoment &&
                 subCommentsD?.map((subComment,index) => {
 
                   if(isShowAllcoment){
+                    if(subComment.commentId==comment.commentId){
                   return (
                     <SubCommentOne
                       key={subComment?.subCommentId}
                       subComment={subComment}
                     ></SubCommentOne>
                   );
+                    }
                   }else {
                  //   console.log('ok',subCommentsD.length,index+1)
                     if(subCommentsD?.length===index+1){
