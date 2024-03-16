@@ -7,12 +7,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+/* eslint-disable */
 // ----------------
 // import PostDispaly from './../component/PostDispaly';
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
-export default function EditModal({post,setStoredPosts,storedPosts,setisDropdown}) {
+export default function EditModal({open, setOpen,post,setStoredPosts,storedPosts,setisDropdown}) {
     console.log('send post ', post.postText);
    //----------------------- pre 
    const logUser = JSON.parse(localStorage.getItem('logUser'))
@@ -25,7 +26,7 @@ export default function EditModal({post,setStoredPosts,storedPosts,setisDropdown
 //   }, [])
   const handleClick = ()=> {
 
-    console.log(typeof post);
+    console.log(postText);
     if(postText==''){
       alert('Empty update empty post don not allow ');
       return;
@@ -50,18 +51,24 @@ export default function EditModal({post,setStoredPosts,storedPosts,setisDropdown
    const postsString = JSON.stringify(updateData);
    localStorage.setItem('posts', postsString);
    
-   setOpen(false);
+   handleClose()
    setisDropdown(false);
+   console.log('done',open)
 //    setPost('');
   }
 
+  if(open){
+    console.log(open);
+  }
+  
+
     // -------------------------
-  const [open, setOpen] = React.useState(false);
+  
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleClickOpen = () => {
-    setOpen(true);
+    // setOpen(true);
   };
 
   const handleClose = () => {
@@ -70,9 +77,7 @@ export default function EditModal({post,setStoredPosts,storedPosts,setisDropdown
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Edit Post 
-      </Button>
+      
       <Dialog
         fullScreen={fullScreen}
         open={open}
@@ -97,10 +102,64 @@ export default function EditModal({post,setStoredPosts,storedPosts,setisDropdown
         </DialogTitle>
         <DialogContent>
         <div className="_feed_inner_text_area  _b_radious6 _padd_b24 _padd_t24 _padd_r24 _padd_l24 _mar_b16">
+          
+          {/* ---------------andu ---------------  */}
+          <div className="_feed_inner_timeline_post_top">
+          <div className="_feed_inner_timeline_post_box">
+            <div className="_feed_inner_timeline_post_box_image">
+              <img
+                src="assets/images/post_img.png"
+                alt=""
+                className="_post_img"
+              />
+            </div>
+
+            <div className="_feed_inner_timeline_post_box_txt">
+              <h4 className="_feed_inner_timeline_post_box_title">
+                {post?.name}
+              </h4>
+              <p className="_feed_inner_timeline_post_box_para">
+                {post?.time} <a href="#0">Public</a>
+              </p>
+            </div>
+          </div>
+          {/* <h1>hello</h1> */}
+          <div className="_feed_inner_timeline_post_box_dropdown">
+            <div className="_feed_timeline_post_dropdown">
+              <button
+                href="#0"
+                id="_timeline_show_drop_btn"
+                className="_feed_timeline_post_dropdown_link"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={4}
+                  height={17}
+                  fill="none"
+                  viewBox="0 0 4 17"
+                >
+                 
+                </svg>
+              </button>
+            </div>
+            {/*Dropdown*/}
+            <div
+              id="_timeline_drop"
+              className={
+                "_feed_timeline_dropdown"
+              }
+            >
+             
+            </div>
+          </div>
+        </div>
+        {/* --------- andu end  */}
+
+
            {/* todo  need flex  */}
            {/* todo  need flex  */}
               <div className="_feed_inner_text_area_box">
-                <div className="_feed_inner_text_area_box_image">
+                {/* <div className="_feed_inner_text_area_box_image">
                 <h4 className="_feed_inner_timeline_post_box_title">
                 {post.name}
                 </h4>
@@ -110,7 +169,7 @@ export default function EditModal({post,setStoredPosts,storedPosts,setisDropdown
                     className="_txt_img"
                   />
                   
-                </div>
+                </div> */}
            {/* ----------------input field start --------------------- */}
            {/* ----------------input field start --------------------- */}
            {/* ----------------input field start --------------------- */}

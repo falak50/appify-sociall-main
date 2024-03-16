@@ -1,18 +1,29 @@
 import CommentOne from "./CommentOne";
+/* eslint-disable */
 
-
-const Comment = ({allComment,setAllComment}) => {
+const Comment = ({post,storedPosts, setStoredPosts,allComment,setAllComment,isShowAllcoment}) => {
     // console.log('allComment ',allComment);
     return (
         <div>
-         {allComment &&
-          allComment?.map(comment =>{
-            return <CommentOne
+         {
+          allComment?.map((comment,index) =>{
+            if(isShowAllcoment){
+              return <CommentOne
             key={comment.commentId}
+            post={post}
             comment={comment}
             ></CommentOne>
+            }else {
+            if(allComment.length-1 === index)
+            return <CommentOne
+            key={comment.commentId}
+            post={post}
+            comment={comment}
+            ></CommentOne>
+            }
           })
          }
+        
         </div>
     );
 };

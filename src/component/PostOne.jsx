@@ -1,45 +1,79 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FcLike, FcLikePlaceholder } from "react-icons/fc";
 import Comment from "./Comment";
 import { v4 as uuidv4 } from "uuid";
 import EditModal from "./EditModal";
-
+/* eslint-disable */
 // eslint-disable react/prop-types
-const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,setlogUser }) => {
+const PostOne = ({
+  post,
+  storedPosts,
+  setStoredPosts,
+  handledeletePost,
+  logUser,
+  setlogUser,
+}) => {
   // const logUser = JSON.parse(localStorage.getItem("logUser"));
   // const [logUser,setlogUser] = useState(JSON.parse(localStorage.getItem("logUser")));
- // console.log(logUser);
+  // console.log(logUser);
   // console.log(post.userId===logUser.userId);
-  const [isOwner,setIsOwner] = useState(post.userId===logUser.userId);
+  const [isOwner, setIsOwner] = useState(post.userId === logUser?.userId);
   const [reactCount, setReactCount] = useState(post?.reactCount);
   const [isReact, setIsReact] = useState(false);
   const [shareCount, setShareCount] = useState(post?.shareCount);
   const [commentCount, setCommentCount] = useState(0);
   /// add commet
   const [allComment, setAllComment] = useState(post?.comments);
+  const [allCommentlast, setAllCommentlast] = useState([]);
   const [commentTxt, setCommentTxt] = useState("");
+  const [isCommentOpen,setIsCommentOpen] = useState(false)
   // console.log("all comment -> ", allComment);
   /// dropdwon
   const [isDropdown, setisDropdown] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isShowAllcoment,setIsShowAllComment] =useState(false);
+  const commentInputRef = useRef(null);
 
-  useEffect(()=>{
-   // console.log('yes in side ')
+  const handleCommentClick = () => {
+    commentInputRef.current.focus();
+  };
+
+  useEffect(() => {
+    // console.log('yes in side ')
     const reactPostID = logUser?.reactPostID;
-    const updatePostID = reactPostID?.filter(x=>{
-     // console.log('x',x);
-     // console.log('cur postid ',post.postId);
+    const updatePostID = reactPostID?.filter((x) => {
+      // console.log('x',x);
+      // console.log('cur postid ',post.postId);
       return post.postId === x;
     });
     // console.log(`post id ${post.postId} `);
     // console.log('updatePostID -> useEE ',updatePostID)
-    if(updatePostID?.length){
+    if (updatePostID?.length) {
       // console.log('true setIsReact')
       setIsReact(true);
-    }else{
+    } else {
       // console.log('false setIsReact')
       setIsReact(false);
     }
-  },[])
+    if(allComment?.length>0){
+      setAllCommentlast([allComment[allComment.length-1]])
+    }
+    
+  }, []);
+  // ----- extra  useEffect ------
+
+  useEffect(() => {
+    const reactUserIds = post.reactUserIds ?? [];
+    console.log("direct reactUserIds ", reactUserIds);
+    const isFound = reactUserIds.find((id) => {
+      return id === logUser.userId;
+    });
+    console.log("is found ", isFound);
+    if (isFound) setIsReact(true);
+    else setIsReact(false);
+
+    setReactCount(reactUserIds.length);
+  }, []);
 
   const handleShare = () => {
     setShareCount((pre) => pre + 1);
@@ -51,61 +85,49 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
 
     // console.log('before ',postl)
     localStorage.setItem("posts", JSON.stringify(postl));
-    
   };
 
   const handleReactUser = (type) => {
     let updateUser;
     if (type) {
-    //  console.log("add");
-     // console.log("before -->", logUser);
+      //  console.log("add");
+      // console.log("before -->", logUser);
       logUser?.reactPostID.push(post.postId);
       updateUser = logUser;
       // setlogUser(updateUser);
       // localStorage.setItem("logUser", JSON.stringify(updateUser));
-      
     } else {
-     // console.log("remove click ");
+      // console.log("remove click ");
       const reactPostID = logUser?.reactPostID;
-      const updatePostID = reactPostID?.filter(x=>{
-      //  console.log('x',x);
-      //  console.log('cur postid ',post.postId);
+      const updatePostID = reactPostID?.filter((x) => {
+        //  console.log('x',x);
+        //  console.log('cur postid ',post.postId);
         return post.postId !== x;
-      })
+      });
       console.log("helo man hello ");
-     console.log("updatePostID asd ", updatePostID);
-     updateUser = logUser;
-     updateUser.reactPostID=updatePostID;
-     //console.log('update user ',updateUser )
-    //  setlogUser(updateUser);
-     /// TODO :  add local storeage logUer
-    //  localStorage.setItem("logUser", JSON.stringify(updateUser));
-     
+      console.log("updatePostID asd ", updatePostID);
+      updateUser = logUser;
+      updateUser.reactPostID = updatePostID;
     }
-
-    
 
     // console.log('outside update user ',updateUser);
     // setlogUser(updateUser);
     localStorage.setItem("logUser", JSON.stringify(updateUser));
-    console.log('end ')
-    const users=JSON.parse(localStorage.getItem("users"));
-    console.log('all user before',users)
-    const updateUsers = users.map((x)=>{
-        if(x.userId==logUser.userId){
-          x.reactPostID=logUser.reactPostID;
-        }
-        return x;
+    console.log("end ");
+    const users = JSON.parse(localStorage.getItem("users"));
+    console.log("all user before", users);
+    const updateUsers = users.map((x) => {
+      if (x?.userId == logUser?.userId) {
+        x.reactPostID = logUser.reactPostID;
+      }
+      return x;
     });
-    console.log('all user id after ',updateUsers);
+    // console.log('all user id after ',updateUsers);
     localStorage.setItem("users", JSON.stringify(updateUsers));
-    
-     
-
-
   };
+
   const handleReact = () => {
-    console.log("react clcik ");
+    // console.log("react clcik ");
 
     const postsl = JSON.parse(localStorage.getItem("posts"));
     const postl = postsl.map((x) => {
@@ -130,40 +152,85 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
     localStorage.setItem("posts", JSON.stringify(postl));
   };
 
+  // ----- extra  handleReact1------
+  const handleReact1 = () => {
+    console.log("hello");
+    const postsl = JSON.parse(localStorage.getItem("posts"));
+    const postl = postsl.map((x) => {
+      if (x.postId == post.postId) {
+        console.log("x reactUserIds ", x?.reactUserIds);
+        if (!x?.reactUserIds) x.reactUserIds = [];
+
+        console.log("x reactUserIds ", x?.reactUserIds);
+        if (!isReact) {
+          x?.reactUserIds?.push(logUser?.userId);
+          console.log("update x", x);
+          setIsReact(true);
+        } else {
+          const reactUserIds = x?.reactUserIds;
+          const update = reactUserIds.filter((id) => {
+            return id !== logUser?.userId;
+          });
+          x.reactUserIds = update;
+          console.log("update x", x);
+          setIsReact(false);
+        }
+        setReactCount(x?.reactUserIds?.length);
+      }
+      return x;
+    });
+    //  console.log('after  ',postl)
+    localStorage.setItem("posts", JSON.stringify(postl));
+  };
+
   const handleComentSubmit = (e) => {
     e.preventDefault();
     if (commentTxt === "") {
-      alert("empty comment can not allow");
+     // alert("empty comment can not allow");
       return;
     }
     const postsl = JSON.parse(localStorage.getItem("posts"));
-   // console.log(postsl);
-   // console.log("handlesubmit click  ", commentTxt);
+    // console.log(postsl);
+    // console.log("handlesubmit click  ", commentTxt);
     const updatePostsl = postsl?.map((x) => {
       if (x?.postId == post.postId) {
         //console.log(x);
         const commentId = uuidv4();
         const newCommnet = {
           commentId: commentId,
-          CommenterName: logUser.name,
-          commenterUserId: logUser.userId,
+          CommenterName: logUser?.name,
+          commenterUserId: logUser?.userId,
           commentReactCount: 0,
           commentText: commentTxt,
           subComments: [],
         };
-        x.comments = [...x.comments, newCommnet];
+        x.comments = [...x.comments,newCommnet];
         setAllComment(x.comments);
       }
       return x;
     });
-   /// console.log("update post ->", updatePostsl);
+    /// console.log("update post ->", updatePostsl);
     const postsString = JSON.stringify(updatePostsl);
     localStorage.setItem("posts", postsString);
     setCommentTxt("");
   };
 
+  console.log('openh',open)
+
   return (
+    <>
+     <EditModal
+                          open={open}
+                          setOpen={(op) => setOpen(op)}
+                          post={post}
+                          storedPosts={storedPosts}
+                          setStoredPosts={setStoredPosts}
+                          setisDropdown={setisDropdown}
+    ></EditModal>
+ 
+    {/* modal end  */}
     <div className="_feed_inner_timeline_post_area _b_radious6 _padd_b24 _padd_t24 _mar_b16">
+                       
       <div className="_feed_inner_timeline_content _padd_r24 _padd_l24">
         <div className="_feed_inner_timeline_post_top">
           <div className="_feed_inner_timeline_post_box">
@@ -259,6 +326,7 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
                     Turn On Notification
                   </a>
                 </li>
+
                 <li className="_feed_timeline_dropdown_item">
                   <a href="#0" className="_feed_timeline_dropdown_link">
                     <span>
@@ -283,73 +351,73 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
                 </li>
                 {/* ------ delete edit butoon --------  */}
                 {/* ------ delete edit butoon --------  */}
-               {isOwner ?
-                <div className="Can_Delete_Edit">
-                <li className="_feed_timeline_dropdown_item">
-                  <a href="#0" className="">
-                  {/* <a href="#0" className="_feed_timeline_dropdown_link"> */}
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={18}
-                        height={18}
-                        fill="none"
-                        viewBox="0 0 18 18"
-                      >
-                        <path
-                          stroke="#1890FF"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.2"
-                          d="M8.25 3H3a1.5 1.5 0 00-1.5 1.5V15A1.5 1.5 0 003 16.5h10.5A1.5 1.5 0 0015 15V9.75"
-                        />
-                        <path
-                          stroke="#1890FF"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.2"
-                          d="M13.875 1.875a1.591 1.591 0 112.25 2.25L9 11.25 6 12l.75-3 7.125-7.125z"
-                        />
-                      </svg>
-                    </span>
-                    {/* edit post  */}
-                    <EditModal 
-                    post={post}
-                    storedPosts={storedPosts}
-                    setStoredPosts={setStoredPosts}
-                    setisDropdown={setisDropdown}
-                    ></EditModal>
-                  </a>
-                </li>
-                <li
-                  onClick={() => handledeletePost(post?.postId)}
-                  className="_feed_timeline_dropdown_item"
-                >
-                  <a href="#0" className="_feed_timeline_dropdown_link">
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={18}
-                        height={18}
-                        fill="none"
-                        viewBox="0 0 18 18"
-                      >
-                        <path
-                          stroke="#1890FF"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.2"
-                          d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5zM7.5 8.25v4.5M10.5 8.25v4.5"
-                        />
-                      </svg>
-                    </span>
-                    Delete Post
-                  </a>
-                </li>
-                </div>
-                : <></>
-               } 
-               {/* <div className="Can_Delete_Edit">
+                {isOwner ? (
+                  <div className="Can_Delete_Edit">
+                    {/* ---- edit  */}
+                    <li
+                      onClick={() => setOpen(true)}
+                      className="_feed_timeline_dropdown_item"
+                    >
+                      <a href="#0" className="_feed_timeline_dropdown_link">
+                        <span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={18}
+                            height={18}
+                            fill="none"
+                            viewBox="0 0 18 18"
+                          >
+                            <path
+                              stroke="#1890FF"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="1.2"
+                              d="M8.25 3H3a1.5 1.5 0 00-1.5 1.5V15A1.5 1.5 0 003 16.5h10.5A1.5 1.5 0 0015 15V9.75"
+                            />
+                            <path
+                              stroke="#1890FF"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="1.2"
+                              d="M13.875 1.875a1.591 1.591 0 112.25 2.25L9 11.25 6 12l.75-3 7.125-7.125z"
+                            />
+                          </svg>
+                        </span>
+                        Edit Post
+                      
+                      </a>
+                    </li>
+
+                    <li
+                      onClick={() => handledeletePost(post?.postId)}
+                      className="_feed_timeline_dropdown_item"
+                    >
+                      <a href="#0" className="_feed_timeline_dropdown_link">
+                        <span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={18}
+                            height={18}
+                            fill="none"
+                            viewBox="0 0 18 18"
+                          >
+                            <path
+                              stroke="#1890FF"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="1.2"
+                              d="M2.25 4.5h13.5M6 4.5V3a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0112 3v1.5m2.25 0V15a1.5 1.5 0 01-1.5 1.5h-7.5a1.5 1.5 0 01-1.5-1.5V4.5h10.5zM7.5 8.25v4.5M10.5 8.25v4.5"
+                            />
+                          </svg>
+                        </span>
+                        Delete Post
+                      </a>
+                    </li>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                {/* <div className="Can_Delete_Edit">
                 <li className="_feed_timeline_dropdown_item">
                   <a href="#0" className="_feed_timeline_dropdown_link">
                     <span>
@@ -462,7 +530,7 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
 
       <div className="_feed_inner_timeline_reaction">
         <button
-          onClick={handleReact}
+          onClick={handleReact1}
           className="_feed_inner_timeline_reaction_emoji _feed_reaction _feed_reaction_active"
         >
           {" "}
@@ -480,7 +548,12 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
             </span>
           </span>
         </button>
-        <button className="_feed_inner_timeline_reaction_comment _feed_reaction">
+        <button
+        //  onClick={()=>setIsCommentOpen(true)}
+        onClick={handleCommentClick}
+          type="button"
+          className="_feed_inner_timeline_reaction_comment _feed_reaction"
+        >
           {" "}
           <span className="_feed_inner_timeline_reaction_link">
             {" "}
@@ -556,6 +629,8 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
               </div>
               <div className="_feed_inner_comment_box_content_txt">
                 <input
+                  ref={commentInputRef}
+                  
                   className="form-control _comment_textarea"
                   placeholder="Write a comment"
                   id="floatingTextarea2"
@@ -565,7 +640,10 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
               </div>
             </div>
             <div className="_feed_inner_comment_box_icon">
-              <button className="_feed_inner_comment_box_icon_btn">
+              <button
+                type="button"
+                className="_feed_inner_comment_box_icon_btn"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width={16}
@@ -583,7 +661,10 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
                 </svg>
               </button>
 
-              <button className="_feed_inner_comment_box_icon_btn">
+              <button
+                type="button"
+                className="_feed_inner_comment_box_icon_btn"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width={16}
@@ -608,13 +689,46 @@ const PostOne = ({ post,storedPosts, setStoredPosts, handledeletePost, logUser,s
       {/* commnet display  */}
       {/* commnet display  */}
       {/* commnet display  */}
-
-      <Comment allComment={allComment} setAllComment={setAllComment}></Comment>
+      {allComment.length>1 && 
+       <div className="mx-4 mt-2 md-0">
+       <div className="_previous_comment">
+                         <button 
+                         onClick={()=> setIsShowAllComment(!isShowAllcoment)}
+                         type="button" class="_previous_comment_txt">
+                          
+                          {!isShowAllcoment ? 
+                          'View '
+                          :
+                          'Close '
+                          }   previous comments
+                          
+                         </button>
+                       </div>
+       </div>
+ 
+ 
+      }
+     
+     
+      <Comment
+      post={post}
+      storedPosts={storedPosts}
+      setStoredPosts={setStoredPosts}
+      allComment={allComment}
+      setAllComment={setAllComment}
+      isShowAllcoment={isShowAllcoment}
+    ></Comment>
+ 
+     
 
       {/* commnet display  */}
       {/* commnet display  */}
       {/* commnet display  */}
     </div>
+              
+    
+    </>
+    
   );
 };
 
